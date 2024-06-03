@@ -27,7 +27,7 @@ func GetBookById(c *gin.Context) {
 		return
 	}
 
-	book, found := findBookById(id)
+	book, found := findBookById(uint(id))
 
 	if !found {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
@@ -64,7 +64,7 @@ func UpdateBook(c *gin.Context) {
         return
     }
 
-    index, found := findBookIndexById(id)
+    index, found := findBookIndexById(uint(id))
     if !found {
         c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
         return
@@ -85,7 +85,7 @@ func DeleteBook(c *gin.Context) {
         return
     }
 
-    index, found := findBookIndexById(id)
+    index, found := findBookIndexById(uint(id))
     if !found {
         c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
         return
@@ -96,20 +96,20 @@ func DeleteBook(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
 }
 
-func findBookById(id int) (models.Book, bool) {
+func findBookById(id uint) (models.Book, bool) {
     for _, book := range models.Books {
-        bookID, err := strconv.Atoi(strconv.Itoa(book.ID))
-        if err == nil && bookID == id {
+        bookID, err := strconv.Atoi(strconv.Itoa(int(book.ID)))
+        if err == nil && bookID == int(id) {
             return book, true
         }
     }
     return models.Book{}, false
 }
 
-func findBookIndexById(id int) (int, bool) {
+func findBookIndexById(id uint) (int, bool) {
     for i, book := range models.Books {
-        bookID, err := strconv.Atoi(strconv.Itoa(book.ID))
-        if err == nil && bookID == id {
+        bookID, err := strconv.Atoi(strconv.Itoa(int(book.ID)))
+        if err == nil && bookID == int(id) {
             return i, true
         }
     }
